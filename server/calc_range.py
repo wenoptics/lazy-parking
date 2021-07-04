@@ -16,6 +16,7 @@ class RangeFinder(Generic[T]):
         if get_lat_lon is None:
             get_lat_lon = self._default_get_ll
         self.__get_lat_lon: Callable[[T], LLTuple] = get_lat_lon
+
         # self.zone_list: typing.List[LLTuple] = [
         #     get_lat_lon(d) for d in zone_map
         # ]
