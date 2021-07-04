@@ -3,7 +3,7 @@ from pathlib import Path
 
 from flask import Flask, request, jsonify
 
-from server.calc_range import RangeFinder
+from calc_range import RangeFinder
 
 SECRET = '173e7d21-83a0-49aa-88b6-05a62ac7e834'
 # SECRET = 'abc'
