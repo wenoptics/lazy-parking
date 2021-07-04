@@ -11,17 +11,21 @@ print("""
 This is to get the zone information from the ParkMobile map.
 
 Instructions:
-1. Wait for the Chromium to be opened
+    Use the "fetch_zone()" to get zone information in the given bounding box lat-lon
 """)
 
 zone_file = 'zone-data.json'
 zone_json = json.load(open(zone_file, 'r+'))  # <zone-id>: { zone-payload }
 js_fetch = open('fetch_zones.js').read()
 
+preserved = {
+    'headers': {}
+}
+
 
 async def process_data(zone_data_payload: [Dict, List]):
     """
-    Read queue, append data to JSON
+    Append data to JSON
 
     Data will be keyed by zone-id, so duplicated items will not be kept
     :return:
@@ -44,8 +48,6 @@ async def process_data(zone_data_payload: [Dict, List]):
                     latitude: 40.438729,
                     longitude: -79.987375
                 }
-                latitude: 40.438729
-                longitude: -79.987375
                 zoneServices: []
             }
         ]
@@ -59,17 +61,12 @@ async def process_data(zone_data_payload: [Dict, List]):
         current.pop('distanceMiles')
 
         zone_json[z_id] = current
-    print('Now total data is: ', len(zone_json))
+    print('Total data is: ', len(zone_json))
     with open(zone_file, 'w') as file:
         json.dump(zone_json, file, indent=2)
 
 
-preserved = {
-    'headers': {}
-}
-
 async def main():
-
     browser = await launch(devtools=True)
     page = await browser.newPage()
     await page.goto('https://app.parkmobile.io/search')
@@ -96,7 +93,7 @@ async def main():
     print('[INFO] Initiate new page for retrieving API request headers')
     await page.goto('https://app.parkmobile.io/search')
 
-    async def fetch_zone(lat1, lon1, lat2, lon2, max_result=100):
+    async def fetch_zone(lat1, lon1, lat2, lon2, max_result=None):
         """Use JavaScript to fetch from PM search API. Return a list of zones information"""
         zone_data = await page.evaluate(
             js_fetch,
@@ -107,13 +104,14 @@ async def main():
         )
         return zone_data
 
-    await asyncio.sleep(2)
+    await page.waitFor(1000)
     z = await fetch_zone(
-        40.5140166878681,-79.71802223179839,40.383341065514124,-80.08537757847807,1000
+        40.5140166878681, -79.71802223179839, 40.383341065514124, -80.08537757847807
     )
     await process_data(z)
 
     await browser.close()
     print('All done.')
+
 
 asyncio.get_event_loop().run_until_complete(main())
