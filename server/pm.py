@@ -15,7 +15,7 @@ class PMNonLoginVisitor(Visitor):
     async def setup_page(self) -> Page:
         browser = await pyppeteer.launch(devtools=self._debug)
         self._browser = browser
-        page = await browser.newPage()
+        page = (await browser.pages())[0]
         await page.setRequestInterception(True)
 
         async def check_request(request: network_manager.Request):
@@ -35,6 +35,7 @@ class PMNonLoginVisitor(Visitor):
         await page.waitFor(1000)
         print('[INFO] Initiate page for retrieving API request headers')
         await page.goto(self.URL_HOME)
+        # This is a panel. Upon loaded, indicates the zones are all loaded
         await page.waitForSelector('.eyhEak')
 
         self._main_page = page

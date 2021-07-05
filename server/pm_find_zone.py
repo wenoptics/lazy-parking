@@ -46,21 +46,23 @@ if __name__ == '__main__':
 
     async def simple_run():
         v = PMNonLoginVisitor(debug=True)
-        await v.setup_page()
+        try:
+            await v.setup_page()
 
-        zones = await api_search_zone(v, 40.5140166878681, -79.71802223179839, 40.383341065514124, -80.08537757847807)
-        # from pprint import pprint; pprint(zones)
-        print(len(zones.get('zones')))
-        print(zones)
+            zones = await api_search_zone(v, 40.5140166878681, -79.71802223179839, 40.383341065514124, -80.08537757847807)
+            # from pprint import pprint; pprint(zones)
+            print(len(zones.get('zones')))
+            print(zones)
 
-        print('======')
+            print('======')
 
-        zones = await find_zone(v, 40.449058, -79.950374, 100)
-        # from pprint import pprint; pprint(zones)
-        print(len(zones.get('zones')))
-        print(zones)
+            zones = await find_zone(v, 40.449058, -79.950374, 100)
+            # from pprint import pprint; pprint(zones)
+            print(len(zones.get('zones')))
+            print(zones)
 
-        await v.teardown()
+        finally:
+            await v.teardown()
 
 
     asyncio.run(simple_run())
