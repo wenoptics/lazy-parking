@@ -20,5 +20,5 @@ pytest
 Spin local server (for a test)
 
 ```bash
-python server/main.py
+python server/__main__.py
 ```
