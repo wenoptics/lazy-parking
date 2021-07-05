@@ -2,6 +2,7 @@ import math
 
 EARTH_R = 6371  # in Kilometers
 P = math.pi / 180
+NORTH, EAST, SOUTH, WEST = 0, 90, 180, 270
 
 
 def lat_lon_2_distance(lat1, lon1, lat2, lon2) -> float:
@@ -31,7 +32,7 @@ def lat_lon_bearing_dist(lat, lon, bearing, distance) -> (float, float):
 
     :param lat: latitude value of the starting point
     :param lon: longitude value of the starting point
-    :param bearing: Bearing direction
+    :param bearing: Bearing direction (clockwise from north)
     :param distance: Distance in meter
     :return:
     """
@@ -55,6 +56,7 @@ def lat_lon_bearing_dist(lat, lon, bearing, distance) -> (float, float):
     # lat, lon to RAD
     lat = lat * P
     lon = lon * P
+    bearing = bearing * P
 
     d_r = distance / EARTH_R
     a = math.sin(lat) * math.cos(d_r)\
