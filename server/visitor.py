@@ -36,7 +36,7 @@ class Visitor:
 
           const req = fetch(url, {
             method,
-            mode: 'same-origin', // no-cors, *cors, same-origin
+            mode: 'cors', // no-cors, *cors, same-origin
             credentials: 'same-origin', // include, *same-origin, omit
             headers: parsedHeaders,
             redirect: 'follow', // manual, *follow, error
@@ -44,7 +44,7 @@ class Visitor:
             body // body data type must match "Content-Type" header
           })
 
-          console.log('New JS fetch: ', url, parsedHeaders, req)
+          console.log('New JS fetch: ', url, parsedHeaders, body, req)
           return req.then(resp => resp.json())
         }
         """
