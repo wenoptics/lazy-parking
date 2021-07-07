@@ -57,9 +57,9 @@ if __name__ == '__main__':
             print('======')
 
             zones = await find_zone(v, 40.449058, -79.950374, 100)
-            # from pprint import pprint; pprint(zones)
-            print(len(zones.get('zones')))
-            print(zones)
+            from pprint import pprint; pprint(zones)
+            # print(len(zones.get('zones')))
+            # print(zones)
 
         finally:
             await v.teardown()
