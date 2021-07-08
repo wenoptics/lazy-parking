@@ -7,14 +7,18 @@ from pyppeteer.page import Page
 
 class Visitor:
 
-    def __init__(self, debug=False):
+    def __init__(self, debug=False, pyppeteer_kwargs=None):
+        if pyppeteer_kwargs is None:
+            pyppeteer_kwargs = {}
+        self._pyppeteer_kwargs = pyppeteer_kwargs
         self._preserved_headers: Dict = {}
         self._debug: bool = debug
+
         self._main_page: Page = None
         self._browser: Browser = None
 
     async def setup_page(self) -> Page:
-        browser = await launch(devtools=self._debug)
+        browser = await launch(**self._pyppeteer_kwargs)
         self._browser = browser
         page = await browser.newPage()
         self._main_page = page

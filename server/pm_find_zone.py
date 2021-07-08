@@ -45,7 +45,7 @@ if __name__ == '__main__':
     from server.pm import PMNonLoginVisitor
 
     async def simple_run():
-        v = PMNonLoginVisitor(debug=True)
+        v = PMNonLoginVisitor(debug=True, pyppeteer_kwargs={"devtools": True})
         try:
             await v.setup_page()
 

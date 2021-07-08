@@ -16,7 +16,7 @@ class PMNonLoginVisitor(PMVisitor):
     URL_HOME = 'https://app.parkmobile.io/search'
 
     async def setup_page(self) -> Page:
-        browser = await pyppeteer.launch(devtools=self._debug)
+        browser = await pyppeteer.launch(**self._pyppeteer_kwargs)
         self._browser = browser
         page = (await browser.pages())[0]
         await page.setRequestInterception(True)
@@ -47,13 +47,13 @@ class PMNonLoginVisitor(PMVisitor):
 
 class PMLoginVisitor(PMVisitor):
 
-    def __init__(self, username, password, debug=False):
-        super().__init__(debug=debug)
+    def __init__(self, username, password, debug=False, pyppeteer_kwargs=None):
+        super().__init__(debug=debug, pyppeteer_kwargs=pyppeteer_kwargs)
         self._username = username
         self._password = password
 
     async def setup_page(self) -> Page:
-        browser = await pyppeteer.launch(devtools=self._debug)
+        browser = await pyppeteer.launch(**self._pyppeteer_kwargs)
         self._browser = browser
         page = (await browser.pages())[0]
 

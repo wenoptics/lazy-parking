@@ -79,4 +79,4 @@ if __name__ == "__main__":
         http://localhost:{PORT}/{SECRET}/park?zoneId=2815560&billingMethodId=32551886&durationMinutes=15&timeBlockIdMinutes=125648&vehicleId=41537782        
     """)
 
-    web.run_app(setup(), port=PORT)
+    web.run_app(setup(), port=PORT, host='0.0.0.0')
