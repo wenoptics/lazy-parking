@@ -1,5 +1,6 @@
 import asyncio
 
+from config import pyppeteer_common
 from utils import lat_lon_bearing_dist, NORTH, WEST, EAST, SOUTH
 from visitor import Visitor
 
@@ -42,14 +43,22 @@ async def api_search_zone(
 
 
 if __name__ == '__main__':
-    from server.pm import PMNonLoginVisitor
+    from pm import PMNonLoginVisitor
+
 
     async def simple_run():
-        v = PMNonLoginVisitor(debug=True, pyppeteer_kwargs={"devtools": True})
+        v = PMNonLoginVisitor(debug=True, pyppeteer_kwargs=dict(
+            **pyppeteer_common,
+            devtools=True,
+            # executablePath='chromium-browser',
+        ))
         try:
             await v.setup_page()
 
-            zones = await api_search_zone(v, 40.5140166878681, -79.71802223179839, 40.383341065514124, -80.08537757847807)
+            zones = await api_search_zone(
+                v,
+                40.5140166878681, -79.71802223179839,
+                40.383341065514124, -80.08537757847807)
             # from pprint import pprint; pprint(zones)
             print(len(zones.get('zones')))
             print(zones)
@@ -57,7 +66,8 @@ if __name__ == '__main__':
             print('======')
 
             zones = await find_zone(v, 40.449058, -79.950374, 100)
-            from pprint import pprint; pprint(zones)
+            from pprint import pprint
+            pprint(zones)
             # print(len(zones.get('zones')))
             # print(zones)
 

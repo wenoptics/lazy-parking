@@ -1,4 +1,7 @@
+import asyncio
+import atexit
 import configparser
+from time import sleep
 
 from aiohttp import web
 from aiohttp.web import Request, Response
@@ -6,6 +9,7 @@ from aiohttp.web import Request, Response
 from pm_find_zone import find_zone
 from pm import PMLoginVisitor
 from pm_parking import api_get_zone_time_block, api_submit_parking
+from config import pyppeteer_common
 
 SECRET = '173e7d21-83a0-49aa-88b6-05a62ac7e834'
 config = configparser.ConfigParser()
@@ -13,7 +17,11 @@ config.read('../.secret')
 v = PMLoginVisitor(
     config.get('testauth', 'username'),
     config.get('testauth', 'password'),
-    debug=True
+    debug=True,
+    pyppeteer_kwargs=dict(
+        **pyppeteer_common,
+        headless=False
+    )
 )
 
 
@@ -58,6 +66,12 @@ async def api_get_time_block(request: Request):
 
 
 async def setup() -> web.Application:
+
+    @atexit.register
+    def clean_up():
+        asyncio.ensure_future(v.teardown())
+        sleep(2)
+
     await v.setup_page()
     print('Page setup OK.', v._main_page.url)
 

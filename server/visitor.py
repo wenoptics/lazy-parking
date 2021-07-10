@@ -32,8 +32,10 @@ class Visitor:
             method='GET',
             url: str = '',
             headers: Optional[Dict] = None,
-            body: [Dict, str, None] = None
+            body: [Dict, str, None] = None,
+            return_json=True
     ) -> Any:
+        js_return = "resp.json()" if return_json else "resp.text()"
         js_function = """
         (method, url, headers, body) => {
           const parsedHeaders = typeof headers === 'string' ? JSON.parse(headers) : headers
@@ -49,9 +51,10 @@ class Visitor:
           })
 
           console.log('New JS fetch: ', url, parsedHeaders, body, req)
-          return req.then(resp => resp.json())
+          return req.then(resp => {{return_type}})
         }
-        """
+        """.replace('{{return_type}}', js_return)
+
         if headers is None:
             headers = {}
         args = [

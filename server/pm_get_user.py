@@ -1,5 +1,6 @@
 import asyncio
 
+from config import pyppeteer_common
 from visitor import Visitor
 
 
@@ -14,7 +15,7 @@ async def api_get_user(
 
 
 if __name__ == '__main__':
-    from server.pm import PMLoginVisitor
+    from pm import PMLoginVisitor
     import configparser
 
     config = configparser.ConfigParser()
@@ -24,7 +25,12 @@ if __name__ == '__main__':
         v = PMLoginVisitor(
             config.get('testauth', 'username'),
             config.get('testauth', 'password'),
-            debug=True)
+            debug=True,
+            pyppeteer_kwargs={
+                **pyppeteer_common,
+                'devtools': True
+            }
+        )
         try:
             await v.setup_page()
 
